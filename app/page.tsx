@@ -44,16 +44,16 @@ export default function Home() {
           />
           <div className="pointer-events-auto mt-8 flex justify-center gap-4">
             <a
-              href="#get-started"
+              href="/playbooks"
               className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black shadow-lg transition hover:bg-white/90 md:text-base"
             >
-              Get Started
+              📚 View Playbooks
             </a>
             <a
-              href="#learn-more"
+              href="/admin"
               className="rounded-full border border-white/30 bg-white/5 px-8 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10 hover:border-white/50 md:text-base"
             >
-              Learn More
+              🔧 Admin Panel
             </a>
           </div>
         </div>

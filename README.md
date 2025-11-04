@@ -1,36 +1,214 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Synapes - AI Playbook Extraction System
 
-## Getting Started
+> Transform documentation into actionable playbooks using AI
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![TimescaleDB](https://img.shields.io/badge/TimescaleDB-PostgreSQL-orange)](https://www.timescale.com/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-green)](https://openai.com/)
+
+## 🎯 What is Synapes?
+
+Synapes automatically extracts structured operational playbooks from your documentation using AI. It analyzes markdown files, deployment guides, runbooks, and other docs to create searchable, actionable playbooks with:
+
+- **Step-by-step instructions** - Clear, executable commands
+- **Common failure modes** - Known issues and solutions
+- **Vector embeddings** - Semantic search capabilities
+- **User feedback** - Continuous improvement loop
+
+## ✨ Features
+
+- 🤖 **AI-Powered Extraction** - GPT-4o-mini converts docs to playbooks
+- 🔍 **Vector Search** - Semantic search using pgvector embeddings
+- 📊 **Admin Dashboard** - Monitor and trigger extractions
+- 💬 **Feedback System** - Learn what's helpful
+- 🎨 **Beautiful UI** - Modern design with GridScan animation
+- ⚡ **Fast & Scalable** - Built on Next.js + TimescaleDB
+
+## 🚀 Quick Start
+
+**👉 READ THIS FIRST: [START_HERE.md](START_HERE.md)**
+
+### Prerequisites
+- Node.js 18+
+- Tiger Cloud database (TimescaleDB)
+- OpenAI API key
+
+### Installation
 
 ```bash
+# Clone the repo
+git clone <your-repo-url>
+cd synapes
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+# Edit .env.local with your credentials:
+# - DATABASE_URL (from Tiger Cloud)
+# - OPENAI_API_KEY (from OpenAI)
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **[START_HERE.md](START_HERE.md)** - Complete getting started guide
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick reference
+- **[SETUP.md](SETUP.md)** - Detailed setup instructions
+- **[STATUS.md](STATUS.md)** - Current project status
 
-## Learn More
+## 🏗️ Architecture
 
-To learn more about Next.js, take a look at the following resources:
+```
+┌─────────────────────────────────────────────┐
+│              NEXT.JS APP                     │
+│  ┌──────────┐  ┌─────────┐  ┌───────────┐  │
+│  │  Admin   │  │Playbooks│  │  Detail   │  │
+│  └────┬─────┘  └────┬────┘  └─────┬─────┘  │
+└───────┼─────────────┼─────────────┼─────────┘
+        │             │             │
+        ▼             ▼             ▼
+┌─────────────────────────────────────────────┐
+│              API ROUTES                      │
+│  /api/extract    /api/playbooks             │
+│  /api/feedback   /api/playbooks/[id]        │
+└─────────────────────────────────────────────┘
+        │                          │
+        ▼                          ▼
+┌──────────────┐          ┌──────────────┐
+│ TimescaleDB  │          │  OpenAI API  │
+│   (Tiger)    │          │              │
+│              │          │ GPT-4o-mini  │
+│ • documents  │          │ • embeddings │
+│ • playbooks  │          └──────────────┘
+│ • feedback   │
+│ • pgvector   │
+└──────────────┘
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+synapes/
+├── app/
+│   ├── api/              # API routes
+│   │   ├── extract/      # Extraction endpoint
+│   │   ├── playbooks/    # Playbooks CRUD
+│   │   └── feedback/     # Feedback submission
+│   ├── admin/            # Admin panel
+│   ├── playbooks/        # Playbooks UI
+│   ├── layout.tsx
+│   └── page.tsx          # Home page
+├── lib/
+│   ├── db.ts            # Database utilities
+│   ├── openai.ts        # AI integration
+│   ├── types.ts         # TypeScript types
+│   └── utils.ts         # Helper functions
+├── components/          # React components
+├── .env.local          # Environment variables
+└── package.json
+```
 
-## Deploy on Vercel
+## 🔌 API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/extract` | GET | Check database status |
+| `/api/extract` | POST | Run playbook extraction |
+| `/api/playbooks` | GET | List all playbooks |
+| `/api/playbooks/[id]` | GET | Get single playbook |
+| `/api/feedback` | POST | Submit feedback |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Tech Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: TimescaleDB (PostgreSQL + pgvector)
+- **AI**: OpenAI GPT-4o-mini + text-embedding-3-small
+- **Animation**: Framer Motion, GSAP
+- **Deployment**: Vercel
+
+## 📊 Database Schema
+
+```sql
+-- Documents (source material)
+CREATE TABLE documents (
+  id SERIAL PRIMARY KEY,
+  source TEXT,
+  content TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Playbooks (extracted data)
+CREATE TABLE playbooks (
+  id SERIAL PRIMARY KEY,
+  task_name TEXT,
+  steps JSONB,
+  common_failures JSONB,
+  embedding vector(1536),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Feedback (user input)
+CREATE TABLE feedback (
+  id SERIAL PRIMARY KEY,
+  playbook_id INTEGER REFERENCES playbooks(id),
+  user_query TEXT,
+  was_helpful BOOLEAN,
+  comment TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+## 🎯 Development Roadmap
+
+### ✅ Day 1: Foundation (Complete)
+- [x] Next.js architecture
+- [x] Database integration
+- [x] OpenAI integration
+- [x] API routes
+- [x] Admin panel
+- [x] Playbooks UI
+
+### 📅 Day 2: Testing & Refinement
+- [ ] Environment configuration
+- [ ] End-to-end testing
+- [ ] Bug fixes
+- [ ] Error handling
+
+### 📅 Day 3: Features & Polish
+- [ ] Semantic search
+- [ ] Real-time progress
+- [ ] Search filters
+- [ ] Export functionality
+- [ ] Mobile optimization
+
+### 📅 Day 4: Deploy & Launch
+- [ ] Performance optimization
+- [ ] Production deployment
+- [ ] Monitoring setup
+- [ ] Documentation finalization
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read the setup docs first.
+
+## 📄 License
+
+MIT
+
+## 🙏 Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/)
+- Powered by [TimescaleDB](https://www.timescale.com/)
+- AI by [OpenAI](https://openai.com/)
+- Deployed on [Vercel](https://vercel.com/)
+
+---
+
+**Ready to get started?** Read [START_HERE.md](START_HERE.md) for complete setup instructions!
