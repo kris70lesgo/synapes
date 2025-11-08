@@ -89,9 +89,21 @@ export default function AdminPage() {
             Run Extraction
           </h2>
           
-          <p className="text-gray-300 mb-6">
-            This will process all documents in the database and extract structured playbooks using GPT-4o-mini.
+          <p className="text-gray-300 mb-4">
+            This will process all documents in the database and extract structured playbooks using <span className="text-blue-400 font-semibold">Claude Sonnet 3.5</span> via OpenRouter.
           </p>
+
+          <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <p className="text-blue-300 text-sm">
+              <span className="font-semibold">💡 AI Model:</span> anthropic/claude-3.5-sonnet
+            </p>
+            <p className="text-blue-300 text-sm mt-1">
+              <span className="font-semibold">🔍 Embeddings:</span> openai/text-embedding-3-small
+            </p>
+            <p className="text-blue-300 text-sm mt-1">
+              <span className="font-semibold">⏱️ Processing:</span> ~10-15 seconds per document
+            </p>
+          </div>
 
           <button
             onClick={runExtraction}
@@ -104,7 +116,7 @@ export default function AdminPage() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Extracting...
+                Extracting with Claude...
               </span>
             ) : (
               '🚀 Start Extraction'
@@ -149,18 +161,30 @@ export default function AdminPage() {
         </div>
 
         {/* Quick Links */}
-        <div className="mt-6 flex gap-4">
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <a
+            href="/upload"
+            className="text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition"
+          >
+            📤 Upload Documents
+          </a>
+          <a
+            href="/database"
+            className="text-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition"
+          >
+            🐘 Database Management
+          </a>
           <a
             href="/playbooks"
-            className="flex-1 text-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition border border-white/20"
+            className="text-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition border border-white/20"
           >
-            View Playbooks
+            📚 View Playbooks
           </a>
           <a
             href="/"
-            className="flex-1 text-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition border border-white/20"
+            className="text-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition border border-white/20"
           >
-            Back to Home
+            🏠 Back to Home
           </a>
         </div>
       </div>

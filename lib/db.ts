@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is not defined');
@@ -14,9 +14,16 @@ export function getPool(): Pool {
       ssl: {
         rejectUnauthorized: false
       },
-      max: 20,
+      max: 5,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 15000,
+      statement_timeout: 15000,
+    });
+
+    // Handle pool errors
+    pool.on('error', (err) => {
+      console.error('Unexpected error on idle client', err);
+      // Don't crash the process
     });
   }
   return pool;
@@ -24,8 +31,20 @@ export function getPool(): Pool {
 
 export async function query<T = any>(text: string, params?: any[]): Promise<T[]> {
   const pool = getPool();
-  const result = await pool.query(text, params);
-  return result.rows;
+  let client: PoolClient | null = null;
+  
+  try {
+    client = await pool.connect();
+    const result = await client.query(text, params);
+    return result.rows;
+  } catch (error) {
+    console.error('Database query error:', error);
+    throw error;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
 }
 
 export async function queryOne<T = any>(text: string, params?: any[]): Promise<T | null> {

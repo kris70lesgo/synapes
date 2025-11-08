@@ -6,6 +6,11 @@ if (!process.env.OPENAI_API_KEY) {
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+  defaultHeaders: {
+    'HTTP-Referer': 'https://synapes.app',
+    'X-Title': 'Synapes Playbook Extractor',
+  },
 });
 
 export interface ExtractedPlaybook {
@@ -33,7 +38,7 @@ Text:
 ${content}`;
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: 'anthropic/claude-3.5-sonnet',
     messages: [{ role: 'user', content: prompt }],
     response_format: { type: 'json_object' },
     temperature: 0.3,
@@ -50,7 +55,7 @@ ${content}`;
 export async function generateEmbedding(text: string): Promise<number[]> {
   const response = await openai.embeddings.create({
     input: text,
-    model: 'text-embedding-3-small',
+    model: 'openai/text-embedding-3-small',
   });
 
   return response.data[0].embedding;
